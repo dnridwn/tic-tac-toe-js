@@ -16,15 +16,16 @@ let playerTurn = 1
 let boards = defaultBoards
 
 const validateClick = (boardIndex) => {
-    return boards[boardIndex] == '' && !checkWinner()
+    return boards[boardIndex] == '' && !hasWinner()
 }
+
 const onBoardClicked = (boardIndex) => {
     if (!validateClick(boardIndex)) {
         return
     }
 
     setSymbol(boardIndex, symbols[playerTurn])
-    if (checkWinner()) {
+    if (hasWinner()) {
         return
     }
 
@@ -35,11 +36,13 @@ const onBoardClicked = (boardIndex) => {
     
     switchPlayer()
 }
+
 const setSymbol = (boardIndex, symbol = '') => {
     boards[boardIndex] = symbol
     document.querySelectorAll('.board')[boardIndex].textContent = boards[boardIndex]
 }
-const checkWinner = () => {
+
+const hasWinner = () => {
     let winCombinationFound = false
     for (let i = 0; i < winCombinations.length; i++) {
         const [ a, b, c ] = winCombinations[i]
@@ -64,17 +67,17 @@ const checkWinner = () => {
 
     return winCombinationFound
 }
+
 const switchPlayer = () => {
     playerTurn = Math.abs(playerTurn - 1)
     document.querySelector('.text-info').textContent = 'Turns: ' + players[playerTurn]
 }
-const isGameOver = () => {
-    if (checkWinner()) {
-        return
-    }
 
+const isGameOver = () => {
+    if (hasWinner()) return
     return boards.filter(v => v != '').length == 9
 };
+
 const reset = () => {
     boards = defaultBoards
     for (let i = 0; i < boards.length; i++) {
